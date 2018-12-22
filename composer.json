@@ -1,0 +1,29 @@
+{
+    "name": "gokhanensep/guzzle-http-client",
+    "description": "Guzzle Http Client",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gökhan ENSEP",
+            "email": "gokhanensep@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "guzzlehttp/guzzle": "^6.3.3",
+        "guzzlehttp/guzzle-services": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.3"
+    },
+    "autoload": {
+        "psr-7": { "GuzzleHttpClient\\": "src/" },
+        "classmap": ["src/"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GuzzleHttpClientTest\\": "src/tests"
+        }
+    }
+}
