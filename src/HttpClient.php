@@ -10,37 +10,38 @@ use GuzzleHttp\Exception\ClientException;
  * Class HttpClient
  * @package GuzzleHttpClient
  */
-class HttpClient {
+class HttpClient
+{
 
-	public $client;
-	public $username;
-	public $password;
-	public $options;
+    public $client;
+    public $username;
+    public $password;
+    public $options;
 
     /**
      * HttpClient constructor.
      * @param array $options
      */
-	public function __construct(array $options = [])
+    public function __construct(array $options = [])
     {
-		$this->client   = new Client();
-		$this->username = $options['username'];
-		$this->password = $options['password'];
-		$this->options  = [
-			RequestOptions::AUTH => [$this->username, $this->password],
-		];
-	}
+        $this->client = new Client();
+        $this->username = $options['username'];
+        $this->password = $options['password'];
+        $this->options = [
+            RequestOptions::AUTH => [$this->username, $this->password],
+        ];
+    }
 
     /**
      * @param array $option
      * @return $this
      */
-	public function addOption(array $option)
+    public function addOption(array $option)
     {
-		$this->options = $option;
+        $this->options = $option;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @param $url
@@ -49,34 +50,30 @@ class HttpClient {
      * @return \Psr\Http\Message\ResponseInterface|null
      * @throws \Exception
      */
-	public function makeRequest(string $method, string $url, $payload = [])
+    public function makeRequest(string $method, string $url, $payload = [])
     {
-		if (empty($url)) {
-			throw new \Exception('URL not found');
-		}
-
-		if ($method == 'get' && !empty($payload)) {
-			$url .= '?' . http_build_query($payload);
-		}
-		else if (in_array($method, ['post', 'put', 'delete'])) {
-			$this->options[RequestOptions::JSON] = $payload;
-		}
-		else {
-		    throw new \Exception('Method not found.');
+        if (empty($url)) {
+            throw new \Exception('URL not found');
         }
 
-		$method = strtolower($method);
+        $method = strtolower($method);
 
-		try {
-			$response = $this->client->$method($url, $this->options);
-		}
-		catch (ClientException $e) {
-			$response = $e->getResponse();
-		}
-		catch (\Exception $e) {
-			throw new \Exception($e->getMessage(), $e->getCode());
-		}
+        if ($method == 'get' && !empty($payload)) {
+            $url .= '?' . http_build_query($payload);
+        } else if (in_array($method, ['post', 'put', 'delete'])) {
+            $this->options[RequestOptions::JSON] = $payload;
+        } else {
+            throw new \Exception('Method not found.');
+        }
 
-		return $response;
-	}
+        try {
+            $response = $this->client->$method($url, $this->options);
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+
+        return $response;
+    }
 }
